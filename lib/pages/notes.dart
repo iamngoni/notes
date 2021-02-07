@@ -277,7 +277,7 @@ class _NotesState extends State<Notes> {
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 8.0,
                                     ),
-                                    child: noteContainer(note: note),
+                                    child: importantNoteContainer(note: note),
                                   );
                                 }).toList(),
                         )
@@ -327,16 +327,74 @@ class _NotesState extends State<Notes> {
         GestureDetector(
           onTap: () =>
               Provider.of<NotesState>(context, listen: false).removeNote(note),
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: 5.0,
+          child: CircleAvatar(
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
             ),
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              shape: BoxShape.circle,
+          ),
+        ),
+      ],
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: nCaramel,
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  note.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  readableTime(
+                    note.updated_at,
+                  ),
+                  style: TextStyle(
+                    color: nGreyDOut,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+              ),
+              child: Text(note.body),
+            ),
+            Text(
+              readableDate(note.date),
+              style: TextStyle(
+                color: nGreyDOut,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget importantNoteContainer({@required Note note}) {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      secondaryActions: <Widget>[
+        GestureDetector(
+          onTap: () => Provider.of<NotesState>(context, listen: false)
+              .triggerUnimportance(note),
+          child: CircleAvatar(
             child: Icon(
               Icons.delete,
               color: Colors.white,
