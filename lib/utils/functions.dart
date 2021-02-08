@@ -4,8 +4,7 @@ String readableDate(DateTime dateTime) =>
 DateTime _today = DateTime.now();
 String today() =>
     "${_day(_today.weekday)} ${_today.day} ${_month(_today.month)}";
-String _day(int day) =>
-    ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day - 1];
+String _day(int day) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day];
 String _month(int month) => [
       "Jan",
       "Feb",

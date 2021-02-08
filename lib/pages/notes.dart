@@ -140,126 +140,161 @@ class _NotesState extends State<Notes> {
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _saveNote,
-        child: Icon(
-          Icons.add,
-          size: 30,
-        ),
-        backgroundColor: nPurple,
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          height: dimensions.height,
-          width: dimensions.width,
-          padding: EdgeInsets.symmetric(
-            vertical: 20,
-            horizontal: 15,
+    return Consumer<NotesState>(
+      builder: (context, controller, child) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: _saveNote,
+            child: Icon(
+              Icons.add,
+              size: 30,
+              color: controller.darkMode ? Colors.black : Colors.white,
+            ),
+            backgroundColor: controller.darkMode ? dYellow : nPurple,
           ),
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Notes.",
-                style: TextStyle(
-                  color: nPurple,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              height: dimensions.height,
+              width: dimensions.width,
+              padding: EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 15,
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              color: controller.darkMode ? dBlack : Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  notesCount(),
-                  importantNotesCount(),
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _categories.map((category) {
-                  bool isSelect = _catIndex == _categories.indexOf(category);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _catIndex = _categories.indexOf(category);
-                      });
-                    },
-                    child: Column(
-                      crossAxisAlignment: category == "Notes"
-                          ? CrossAxisAlignment.start
-                          : CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          category,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: isSelect ? Colors.black : nGreyDOut,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Notes.",
+                        style: TextStyle(
+                          color: controller.darkMode ? dYellow : nPurple,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
                         ),
-                        isSelect
-                            ? category == "Notes"
-                                ? Row(
-                                    children: [
-                                      Container(
-                                        height: 3,
-                                        width: 30,
-                                        color: nPurple,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Container(
-                                        height: 3,
-                                        width: 5,
-                                        decoration: BoxDecoration(
-                                          color: nPurple,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Row(
-                                    children: [
-                                      Container(
-                                        height: 3,
-                                        width: 5,
-                                        decoration: BoxDecoration(
-                                          color: nPurple,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Container(
-                                        height: 3,
-                                        width: 50,
-                                        color: nPurple,
-                                      ),
-                                    ],
-                                  )
-                            : SizedBox.shrink(),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Consumer<NotesState>(
-                builder: (context, controller, child) {
-                  return controller.notesCount > 0
+                      ),
+                      GestureDetector(
+                        child: controller.darkMode == true
+                            ? Text(
+                                "🌚",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              )
+                            : Text(
+                                "🌞",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                        onTap: () => controller.changeDarkMode(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      notesCount(),
+                      importantNotesCount(),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: _categories.map((category) {
+                      bool isSelect =
+                          _catIndex == _categories.indexOf(category);
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _catIndex = _categories.indexOf(category);
+                          });
+                        },
+                        child: Column(
+                          crossAxisAlignment: category == "Notes"
+                              ? CrossAxisAlignment.start
+                              : CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              category,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: isSelect
+                                    ? controller.darkMode
+                                        ? dYellow
+                                        : nPurple
+                                    : nGreyDOut,
+                              ),
+                            ),
+                            isSelect
+                                ? category == "Notes"
+                                    ? Row(
+                                        children: [
+                                          Container(
+                                            height: 3,
+                                            width: 30,
+                                            color: controller.darkMode
+                                                ? Colors.white
+                                                : nPurple,
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            height: 3,
+                                            width: 5,
+                                            decoration: BoxDecoration(
+                                              color: controller.darkMode
+                                                  ? Colors.white
+                                                  : nPurple,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Container(
+                                            height: 3,
+                                            width: 5,
+                                            decoration: BoxDecoration(
+                                              color: controller.darkMode
+                                                  ? Colors.white
+                                                  : nPurple,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            height: 3,
+                                            width: 50,
+                                            color: controller.darkMode
+                                                ? Colors.white
+                                                : nPurple,
+                                          ),
+                                        ],
+                                      )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  controller.notesCount > 0
                       ? ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -284,7 +319,7 @@ class _NotesState extends State<Notes> {
                       : Container(
                           width: dimensions.width,
                           decoration: BoxDecoration(
-                            color: nCaramel,
+                            color: controller.darkMode ? dCardDark : nCaramel,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           padding: EdgeInsets.all(15.0),
@@ -292,166 +327,187 @@ class _NotesState extends State<Notes> {
                             "0 notes. 😣",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: controller.darkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
-                        );
-                },
+                        ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget noteContainer({@required Note note}) {
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actions: <Widget>[
-        GestureDetector(
-          child: CircleAvatar(
-            backgroundColor: nCaramel,
-            child: Icon(
-              note.is_important == 1 ? Icons.star : Icons.star_outline,
-              color: nPurple,
-            ),
-          ),
-          onTap: () => note.is_important == 1
-              ? Provider.of<NotesState>(context, listen: false)
-                  .triggerUnimportance(note)
-              : Provider.of<NotesState>(context, listen: false)
-                  .triggerImportance(note),
-        ),
-      ],
-      secondaryActions: <Widget>[
-        GestureDetector(
-          onTap: () =>
-              Provider.of<NotesState>(context, listen: false).removeNote(note),
-          child: CircleAvatar(
-            child: Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          color: nCaramel,
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  note.title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                  ),
-                ),
-                Text(
-                  readableTime(
-                    note.updated_at,
-                  ),
-                  style: TextStyle(
-                    color: nGreyDOut,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
-              ),
-              child: Text(note.body),
-            ),
-            Text(
-              readableDate(note.date),
-              style: TextStyle(
-                color: nGreyDOut,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+    return Consumer<NotesState>(builder: (context, controller, child) {
+      return Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        actions: <Widget>[
+          GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: nCaramel,
+              child: Icon(
+                note.is_important == 1 ? Icons.star : Icons.star_outline,
+                color: controller.darkMode ? dYellow : nPurple,
               ),
             ),
-          ],
+            onTap: () => note.is_important == 1
+                ? Provider.of<NotesState>(context, listen: false)
+                    .triggerUnimportance(note)
+                : Provider.of<NotesState>(context, listen: false)
+                    .triggerImportance(note),
+          ),
+        ],
+        secondaryActions: <Widget>[
+          GestureDetector(
+            onTap: () => Provider.of<NotesState>(context, listen: false)
+                .removeNote(note),
+            child: CircleAvatar(
+              backgroundColor: controller.darkMode ? dYellow : nPurple,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: controller.darkMode ? dCardDark : nCaramel,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    note.title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18,
+                      color: controller.darkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  Text(
+                    readableTime(
+                      note.updated_at,
+                    ),
+                    style: TextStyle(
+                      color: nGreyDOut,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                ),
+                child: Text(
+                  note.body,
+                  style: TextStyle(
+                    color: controller.darkMode ? nGreyDOut : Colors.black,
+                  ),
+                ),
+              ),
+              Text(
+                readableDate(note.date),
+                style: TextStyle(
+                  color: nGreyDOut,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget importantNoteContainer({@required Note note}) {
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      secondaryActions: <Widget>[
-        GestureDetector(
-          onTap: () => Provider.of<NotesState>(context, listen: false)
-              .triggerUnimportance(note),
-          child: CircleAvatar(
-            child: Icon(
-              Icons.delete,
-              color: Colors.white,
+    return Consumer<NotesState>(builder: (context, controller, child) {
+      return Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        secondaryActions: <Widget>[
+          GestureDetector(
+            onTap: () => Provider.of<NotesState>(context, listen: false)
+                .triggerUnimportance(note),
+            child: CircleAvatar(
+              backgroundColor: controller.darkMode ? dYellow : nPurple,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-      ],
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          color: nCaramel,
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  note.title,
+        ],
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: controller.darkMode ? dCardDark : nCaramel,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    note.title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18,
+                      color: controller.darkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  Text(
+                    readableTime(
+                      note.updated_at,
+                    ),
+                    style: TextStyle(
+                      color: nGreyDOut,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                ),
+                child: Text(
+                  note.body,
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
+                    color: controller.darkMode ? nGreyDOut : Colors.black,
                   ),
                 ),
-                Text(
-                  readableTime(
-                    note.updated_at,
-                  ),
-                  style: TextStyle(
-                    color: nGreyDOut,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+              ),
+              Text(
+                readableDate(note.date),
+                style: TextStyle(
+                  color: nGreyDOut,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
               ),
-              child: Text(note.body),
-            ),
-            Text(
-              readableDate(note.date),
-              style: TextStyle(
-                color: nGreyDOut,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget notesCount() {
@@ -462,7 +518,7 @@ class _NotesState extends State<Notes> {
           padding: EdgeInsets.all(20.0),
           height: 200,
           decoration: BoxDecoration(
-            color: nPurple,
+            color: controller.darkMode ? dYellow : nPurple,
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Column(
@@ -472,7 +528,7 @@ class _NotesState extends State<Notes> {
               Text(
                 "Notes",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: controller.darkMode ? Colors.black : Colors.white,
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
                 ),
@@ -480,7 +536,7 @@ class _NotesState extends State<Notes> {
               Text(
                 controller.notesCount.toString(),
                 style: TextStyle(
-                  color: Colors.white,
+                  color: controller.darkMode ? Colors.black : Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -500,7 +556,7 @@ class _NotesState extends State<Notes> {
           padding: EdgeInsets.all(20.0),
           height: 200,
           decoration: BoxDecoration(
-            color: nCaramel,
+            color: controller.darkMode ? dCardDark : nCaramel,
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Column(
@@ -518,7 +574,7 @@ class _NotesState extends State<Notes> {
               Text(
                 controller.importantNotesCount.toString(),
                 style: TextStyle(
-                  color: Colors.black,
+                  color: controller.darkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),

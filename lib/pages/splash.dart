@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:notes/pages/notes.dart';
+import 'package:notes/pages/first_time.dart';
+import 'package:notes/pages/home.dart';
 import 'package:notes/utils/colors.dart';
+import 'package:notes/utils/preferences.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -10,11 +12,24 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  _toHome() => Navigator.of(context).pushReplacement(
+  _toHome() async {
+    JsonPreferences _prefs = new JsonPreferences();
+    await _prefs.init();
+    Map<String, dynamic> preferences = _prefs.readFromFile();
+    if (preferences["first_attempt"] == true) {
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => Notes(),
+          builder: (context) => FirstTime(),
         ),
       );
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => HomeTabBar(),
+        ),
+      );
+    }
+  }
 
   @override
   void initState() {
