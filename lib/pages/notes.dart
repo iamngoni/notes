@@ -5,6 +5,7 @@ import 'package:notes/controllers/notes.dart';
 import 'package:notes/models/notes.dart';
 import 'package:notes/utils/colors.dart';
 import 'package:notes/utils/functions.dart';
+import 'package:notes/widgets/dark_mode_switch.dart';
 import 'package:provider/provider.dart';
 
 class Notes extends StatefulWidget {
@@ -176,22 +177,7 @@ class _NotesState extends State<Notes> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      GestureDetector(
-                        child: controller.darkMode == true
-                            ? Text(
-                                "🌚",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              )
-                            : Text(
-                                "🌞",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                        onTap: () => controller.changeDarkMode(),
-                      ),
+                      darkModeSwitch(),
                     ],
                   ),
                   SizedBox(
