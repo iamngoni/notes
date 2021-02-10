@@ -50,6 +50,7 @@ class _FirstTimeState extends State<FirstTime> {
                 }
                 await _prefs.init();
                 _prefs.writeToFile("name", text);
+                _prefs.writeToFile("first_attempt", false);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => HomeTabBar(),

@@ -47,6 +47,7 @@ class JsonPreferences {
     fileContent = json.decode(jsonFile.readAsStringSync());
   }
 
+  // ignore: missing_return
   Map<String, dynamic> readFromFile() {
     if (this.fileExists) {
       Map<String, dynamic> jsonFileContent = json.decode(

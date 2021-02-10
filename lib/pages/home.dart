@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:notes/controllers/notes.dart';
+import 'package:notes/controllers/settings.dart';
 import 'package:notes/pages/dashboard.dart';
 import 'package:notes/pages/notes.dart';
 import 'package:notes/utils/colors.dart';
@@ -21,7 +21,7 @@ class _HomeTabBarState extends State<HomeTabBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar:
-          Consumer<NotesState>(builder: (context, controller, child) {
+          Consumer<SettingsState>(builder: (context, controller, child) {
         return BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,

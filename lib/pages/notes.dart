@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notes/controllers/notes.dart';
+import 'package:notes/controllers/settings.dart';
 import 'package:notes/models/notes.dart';
 import 'package:notes/utils/colors.dart';
 import 'package:notes/utils/functions.dart';
@@ -141,7 +142,7 @@ class _NotesState extends State<Notes> {
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
-    return Consumer<NotesState>(
+    return Consumer<SettingsState>(
       builder: (context, controller, child) {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
@@ -280,45 +281,51 @@ class _NotesState extends State<Notes> {
                   SizedBox(
                     height: 20.0,
                   ),
-                  controller.notesCount > 0
-                      ? ListView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          children: _catIndex == 0
-                              ? controller.notes.map((note) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                    ),
-                                    child: noteContainer(note: note),
-                                  );
-                                }).toList()
-                              : controller.important.map((note) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                    ),
-                                    child: importantNoteContainer(note: note),
-                                  );
-                                }).toList(),
-                        )
-                      : Container(
-                          width: dimensions.width,
-                          decoration: BoxDecoration(
-                            color: controller.darkMode ? dCardDark : nCaramel,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            "0 notes. 😣",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: controller.darkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
+                  Consumer<NotesState>(
+                    builder: (context, notesController, child) {
+                      return notesController.notesCount > 0
+                          ? ListView(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              children: _catIndex == 0
+                                  ? notesController.notes.map((note) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0,
+                                        ),
+                                        child: noteContainer(note: note),
+                                      );
+                                    }).toList()
+                                  : notesController.important.map((note) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0,
+                                        ),
+                                        child:
+                                            importantNoteContainer(note: note),
+                                      );
+                                    }).toList(),
+                            )
+                          : Container(
+                              width: dimensions.width,
+                              decoration: BoxDecoration(
+                                color:
+                                    controller.darkMode ? dCardDark : nCaramel,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              padding: EdgeInsets.all(15.0),
+                              child: Text(
+                                "0 notes. 😣",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: controller.darkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -329,7 +336,7 @@ class _NotesState extends State<Notes> {
   }
 
   Widget noteContainer({@required Note note}) {
-    return Consumer<NotesState>(builder: (context, controller, child) {
+    return Consumer<SettingsState>(builder: (context, controller, child) {
       return Slidable(
         actionPane: SlidableDrawerActionPane(),
         actions: <Widget>[
@@ -421,7 +428,7 @@ class _NotesState extends State<Notes> {
   }
 
   Widget importantNoteContainer({@required Note note}) {
-    return Consumer<NotesState>(builder: (context, controller, child) {
+    return Consumer<SettingsState>(builder: (context, controller, child) {
       return Slidable(
         actionPane: SlidableDrawerActionPane(),
         secondaryActions: <Widget>[
@@ -479,6 +486,8 @@ class _NotesState extends State<Notes> {
                   style: TextStyle(
                     color: controller.darkMode ? nGreyDOut : Colors.black,
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
                 ),
               ),
               Text(
@@ -497,7 +506,7 @@ class _NotesState extends State<Notes> {
   }
 
   Widget notesCount() {
-    return Consumer<NotesState>(
+    return Consumer<SettingsState>(
       builder: (context, controller, child) {
         return Container(
           width: MediaQuery.of(context).size.width * 0.45,
@@ -519,13 +528,17 @@ class _NotesState extends State<Notes> {
                   fontSize: 18,
                 ),
               ),
-              Text(
-                controller.notesCount.toString(),
-                style: TextStyle(
-                  color: controller.darkMode ? Colors.black : Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+              Consumer<NotesState>(
+                builder: (context, notesController, child) {
+                  return Text(
+                    notesController.notesCount.toString(),
+                    style: TextStyle(
+                      color: controller.darkMode ? Colors.black : Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -535,7 +548,7 @@ class _NotesState extends State<Notes> {
   }
 
   Widget importantNotesCount() {
-    return Consumer<NotesState>(
+    return Consumer<SettingsState>(
       builder: (context, controller, child) {
         return Container(
           width: MediaQuery.of(context).size.width * 0.45,
@@ -557,13 +570,17 @@ class _NotesState extends State<Notes> {
                   fontSize: 18,
                 ),
               ),
-              Text(
-                controller.importantNotesCount.toString(),
-                style: TextStyle(
-                  color: controller.darkMode ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+              Consumer<NotesState>(
+                builder: (context, notesController, child) {
+                  return Text(
+                    notesController.importantNotesCount.toString(),
+                    style: TextStyle(
+                      color: controller.darkMode ? nGreyDOut : dCardDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  );
+                },
               ),
             ],
           ),

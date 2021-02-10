@@ -6,13 +6,17 @@ class Note {
   final String title;
   final String body;
   final DateTime date;
+  // ignore: non_constant_identifier_names
   final DateTime updated_at;
+  // ignore: non_constant_identifier_names
   final int is_important;
   Note({
     @required this.title,
     @required this.body,
     @required this.date,
+    // ignore: non_constant_identifier_names
     @required this.updated_at,
+    // ignore: non_constant_identifier_names
     @required this.is_important,
   });
 

@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:notes/controllers/settings.dart';
 import 'package:notes/pages/first_time.dart';
 import 'package:notes/pages/home.dart';
 import 'package:notes/utils/colors.dart';
 import 'package:notes/utils/preferences.dart';
+import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -41,21 +43,23 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        height: dimensions.height,
-        width: dimensions.width,
-        color: Colors.white,
-        child: Center(
-          child: Text(
-            "notes.",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: nPurple,
-              fontSize: 35,
+      body: Consumer<SettingsState>(builder: (context, controller, child) {
+        return Container(
+          height: dimensions.height,
+          width: dimensions.width,
+          color: controller.darkMode ? dBlack : Colors.white,
+          child: Center(
+            child: Text(
+              "notes.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: controller.darkMode ? dYellow : nPurple,
+                fontSize: 35,
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
